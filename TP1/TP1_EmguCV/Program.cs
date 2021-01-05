@@ -29,7 +29,21 @@ namespace TP1_EmguCV {
             CvInvoke.Flip(matBase, matFlip, FlipType.Vertical);
 
 
-            CvInvoke.Imshow(window, matFlip);
+
+            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(matBase.Width * 3, matBase.Height);
+
+            Image<Bgr, Byte> imgBase = matBase.ToImage<Bgr, Byte>();
+            Image<Bgr, Byte> imgFlip = matFlip.ToImage<Bgr, Byte>();
+            Image<Gray, Byte> imgGray = matGrey.ToImage<Gray, Byte>();
+
+            CopyToImage(ref imgBase, ref resultImage, 0, 0);
+            CopyToImage(ref imgFlip, ref resultImage, imgBase.Width, 0);
+            CopyToImage(ref imgGray, ref resultImage, imgBase.Width * 2, 0);
+
+            resultImage.Save("..\\..\\..\\..\\images\\resultEx4.jpg");
+
+
+            CvInvoke.Imshow(window, resultImage.Mat);
             CvInvoke.WaitKey(0);  //Wait for the key pressing event
             CvInvoke.DestroyWindow(window); //Destroy the window if key is pressed
 
