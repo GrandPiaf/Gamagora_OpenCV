@@ -24,8 +24,12 @@ namespace TP1_EmguCV {
 
             CvInvoke.CvtColor(matBase, matGrey, ColorConversion.Bgr2Gray);
 
+            Mat matFlip = new Mat(matBase.Width, matBase.Height, DepthType.Cv8U, 2);
 
-            CvInvoke.Imshow(window, matGrey);
+            CvInvoke.Flip(matBase, matFlip, FlipType.Vertical);
+
+
+            CvInvoke.Imshow(window, matFlip);
             CvInvoke.WaitKey(0);  //Wait for the key pressing event
             CvInvoke.DestroyWindow(window); //Destroy the window if key is pressed
 
