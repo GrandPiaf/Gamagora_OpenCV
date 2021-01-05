@@ -4,6 +4,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
+using System.Drawing;
 
 namespace TP1_EmguCV {
     class Program {
@@ -34,19 +35,21 @@ namespace TP1_EmguCV {
 
             Image<Gray, Byte> imgThreshold = imgHsv.InRange(borneInf, borneSup);
 
+            // Erode then Dilate ('open' the image)
+            Point anchor = new Point(-1, -1);
+            Mat structuringElement = CvInvoke.GetStructuringElement(ElementShape.Ellipse, new System.Drawing.Size(5, 5), anchor);
+            int nbIterations = 5;
+
+            CvInvoke.Erode(imgThreshold, imgThreshold, structuringElement, anchor, nbIterations, BorderType.Constant, new MCvScalar(0));
+            CvInvoke.Dilate(imgThreshold, imgThreshold, structuringElement, anchor, nbIterations, BorderType.Constant, new MCvScalar(0));
+
+
             /* Writing the result image */
-            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(matBase.Width * 3, matBase.Height * 2);
+            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(matBase.Width, matBase.Height);
 
-            Image<Bgr, Byte> imgBase = matBase.ToImage<Bgr, Byte>();
+            CopyToImage(ref imgThreshold, ref resultImage, 0, 0);
 
-            CopyToImage(ref imgBase, ref resultImage, 0, 0);
-            CopyToImage(ref imgHsv, ref resultImage, imgBase.Width, 0);
-            CopyToImage(ref imgThreshold, ref resultImage, imgBase.Width * 2, 0);
-            GrayCopyChannelToImage(ref imgHsv, ref resultImage, 0, imgBase.Height, 0);
-            GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width, imgBase.Height, 1);
-            GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width * 2, imgBase.Height, 2);
-
-            resultImage.Save("..\\..\\..\\..\\images\\resultEx6.jpg");
+            resultImage.Save("..\\..\\..\\..\\resultImages\\resultEx6.jpg");
 
 
             CvInvoke.Imshow(window, resultImage.Mat);
@@ -88,7 +91,7 @@ namespace TP1_EmguCV {
             GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width, imgBase.Height, 1);
             GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width * 2, imgBase.Height, 2);
 
-            resultImage.Save("..\\..\\..\\..\\images\\resultEx5.jpg");
+            resultImage.Save("..\\..\\..\\..\\resultImages\\resultEx5.jpg");
 
 
             CvInvoke.Imshow(window, resultImage.Mat);
@@ -124,7 +127,7 @@ namespace TP1_EmguCV {
             CopyToImage(ref imgFlip, ref resultImage, imgBase.Width, 0);
             CopyToImage(ref imgGray, ref resultImage, imgBase.Width * 2, 0);
 
-            resultImage.Save("..\\..\\..\\..\\images\\resultEx4.jpg");
+            resultImage.Save("..\\..\\..\\..\\resultImages\\resultEx4.jpg");
 
 
             CvInvoke.Imshow(window, resultImage.Mat);
