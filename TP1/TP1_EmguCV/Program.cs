@@ -13,23 +13,23 @@ namespace TP1_EmguCV {
 
         }
 
-        //static void Exercice4() {
+        static void Exercice4() {
 
-        //    String window = "TP1";
-        //    CvInvoke.NamedWindow(window);
+            String window = "TP1";
+            CvInvoke.NamedWindow(window);
 
-        //    Mat matBase = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
+            Mat matBase = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
 
-        //    Mat matGrey = new Mat(matBase.Width, matBase.Height, )
+            Mat matGrey = new Mat(matBase.Width, matBase.Height, DepthType.Cv8U, 0);
 
-        //    CvInvoke.CvtColor(baseImg, baseGrayImg);
+            CvInvoke.CvtColor(matBase, matGrey, ColorConversion.Bgr2Gray);
 
 
-        //    CvInvoke.Imshow(window, matRes);
-        //    CvInvoke.WaitKey(0);  //Wait for the key pressing event
-        //    CvInvoke.DestroyWindow(window); //Destroy the window if key is pressed
+            CvInvoke.Imshow(window, matGrey);
+            CvInvoke.WaitKey(0);  //Wait for the key pressing event
+            CvInvoke.DestroyWindow(window); //Destroy the window if key is pressed
 
-        //}
+        }
 
         static void Exercice3() {
 
