@@ -16,11 +16,13 @@ namespace TP1_EmguCV {
 
             Image<Bgr, Byte> baseImg = matWebcam.ToImage<Bgr, Byte>();
             Image<Gray, Byte> grayScaleBaseImg = matWebcam.ToImage<Gray, Byte>();
+            Image<Hsv, Byte> hsvScaleBaseImg = matWebcam.ToImage<Hsv, Byte>();
 
             Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(baseImg.Width * 2, baseImg.Height);
 
             CopyToImage(ref baseImg, ref resultImage, 0, 0);
-            CopyToImage(ref grayScaleBaseImg, ref resultImage, grayScaleBaseImg.Width, 0);
+            //CopyToImage(ref grayScaleBaseImg, ref resultImage, grayScaleBaseImg.Width, 0);
+            GrayCopyChannelToImage(ref hsvScaleBaseImg, ref resultImage, grayScaleBaseImg.Width, 0, 0);
 
             Mat matRes = resultImage.Mat;
 
@@ -54,6 +56,21 @@ namespace TP1_EmguCV {
                     outputImg.Data[i + offsetY, j + offsetX, 0] = inputImg.Data[i, j, 0];
                     outputImg.Data[i + offsetY, j + offsetX, 1] = inputImg.Data[i, j, 0];
                     outputImg.Data[i + offsetY, j + offsetX, 2] = inputImg.Data[i, j, 0];
+
+                }
+            }
+
+        }
+
+        // Gray to BGR
+        static void GrayCopyChannelToImage(ref Image<Hsv, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY, int channel) {
+
+            for (int i = 0; i < inputImg.Height; i++) {
+                for (int j = 0; j < inputImg.Width; j++) {
+
+                    outputImg.Data[i + offsetY, j + offsetX, 0] = inputImg.Data[i, j, channel];
+                    outputImg.Data[i + offsetY, j + offsetX, 1] = inputImg.Data[i, j, channel];
+                    outputImg.Data[i + offsetY, j + offsetX, 2] = inputImg.Data[i, j, channel];
 
                 }
             }
