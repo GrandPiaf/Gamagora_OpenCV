@@ -9,7 +9,49 @@ namespace TP1_EmguCV {
     class Program {
         static void Main(string[] args) {
 
-            Exercice5();
+            Exercice6();
+
+        }
+
+        static void Exercice6() {
+
+            String window = "TP1 - Exercice 6";
+            CvInvoke.NamedWindow(window);
+
+            /* Reading the base image */
+            Mat matBase = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
+
+            /* Applying treatment */
+
+            // Convert base image to HSV
+            Mat matHsv = new Mat(matBase.Width, matBase.Height, DepthType.Cv8U, 2);
+            CvInvoke.CvtColor(matBase, matHsv, ColorConversion.Bgr2Hsv);
+            Image<Hsv, Byte> imgHsv = matHsv.ToImage<Hsv, Byte>();
+
+            // Thresholding the image
+            Hsv borneInf = new Hsv(50, 0, 0);
+            Hsv borneSup = new Hsv(75, 255, 255);
+
+            Image<Gray, Byte> imgThreshold = imgHsv.InRange(borneInf, borneSup);
+
+            /* Writing the result image */
+            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(matBase.Width * 3, matBase.Height * 2);
+
+            Image<Bgr, Byte> imgBase = matBase.ToImage<Bgr, Byte>();
+
+            CopyToImage(ref imgBase, ref resultImage, 0, 0);
+            CopyToImage(ref imgHsv, ref resultImage, imgBase.Width, 0);
+            CopyToImage(ref imgThreshold, ref resultImage, imgBase.Width * 2, 0);
+            GrayCopyChannelToImage(ref imgHsv, ref resultImage, 0, imgBase.Height, 0);
+            GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width, imgBase.Height, 1);
+            GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width * 2, imgBase.Height, 2);
+
+            resultImage.Save("..\\..\\..\\..\\images\\resultEx6.jpg");
+
+
+            CvInvoke.Imshow(window, resultImage.Mat);
+            CvInvoke.WaitKey(0);  //Wait for the key pressing event
+            CvInvoke.DestroyWindow(window); //Destroy the window if key is pressed
 
         }
 
@@ -18,24 +60,36 @@ namespace TP1_EmguCV {
             String window = "TP1 - Exercice 5";
             CvInvoke.NamedWindow(window);
 
+            /* Reading the base image */
             Mat matBase = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
 
+            /* Applying treatment */
+
+            // Convert base image to HSV
             Mat matHsv = new Mat(matBase.Width, matBase.Height, DepthType.Cv8U, 2);
-
             CvInvoke.CvtColor(matBase, matHsv, ColorConversion.Bgr2Hsv);
+            Image<Hsv, Byte> imgHsv = matHsv.ToImage<Hsv, Byte>();
 
+            // Thresholding the image
+            Hsv borneInf = new Hsv(50, 0, 0);
+            Hsv borneSup = new Hsv(75, 255, 255);
+
+            Image<Gray, Byte> imgThreshold = imgHsv.InRange(borneInf, borneSup);
+
+            /* Writing the result image */
             Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(matBase.Width * 3, matBase.Height * 2);
 
             Image<Bgr, Byte> imgBase = matBase.ToImage<Bgr, Byte>();
-            Image<Hsv, Byte> imgHsv = matHsv.ToImage<Hsv, Byte>();
 
             CopyToImage(ref imgBase, ref resultImage, 0, 0);
             CopyToImage(ref imgHsv, ref resultImage, imgBase.Width, 0);
+            CopyToImage(ref imgThreshold, ref resultImage, imgBase.Width * 2, 0);
             GrayCopyChannelToImage(ref imgHsv, ref resultImage, 0, imgBase.Height, 0);
             GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width, imgBase.Height, 1);
             GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width * 2, imgBase.Height, 2);
 
             resultImage.Save("..\\..\\..\\..\\images\\resultEx5.jpg");
+
 
             CvInvoke.Imshow(window, resultImage.Mat);
             CvInvoke.WaitKey(0);  //Wait for the key pressing event
