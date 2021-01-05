@@ -9,6 +9,12 @@ namespace TP1_EmguCV {
     class Program {
         static void Main(string[] args) {
 
+            Exercice3();
+
+        }
+
+        static void Exercice3() {
+
             String window = "TP1";
             CvInvoke.NamedWindow(window);
 
@@ -18,11 +24,11 @@ namespace TP1_EmguCV {
             Image<Gray, Byte> grayScaleBaseImg = matWebcam.ToImage<Gray, Byte>();
             Image<Hsv, Byte> hsvScaleBaseImg = matWebcam.ToImage<Hsv, Byte>();
 
-            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(baseImg.Width * 2, baseImg.Height);
+            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(baseImg.Width * 3, baseImg.Height);
 
             CopyToImage(ref baseImg, ref resultImage, 0, 0);
-            //CopyToImage(ref grayScaleBaseImg, ref resultImage, grayScaleBaseImg.Width, 0);
-            GrayCopyChannelToImage(ref hsvScaleBaseImg, ref resultImage, grayScaleBaseImg.Width, 0, 0);
+            CopyToImage(ref grayScaleBaseImg, ref resultImage, baseImg.Width, 0);
+            GrayCopyChannelToImage(ref hsvScaleBaseImg, ref resultImage, baseImg.Width * 2, 0, 0);
 
             Mat matRes = resultImage.Mat;
 
