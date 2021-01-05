@@ -14,11 +14,13 @@ namespace TP1_EmguCV {
 
             Mat matWebcam = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
 
-            Image<Bgr, Byte> img = matWebcam.ToImage<Bgr, Byte>();
-            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(img.Width * 2, img.Height);
+            Image<Bgr, Byte> baseImg = matWebcam.ToImage<Bgr, Byte>();
+            Image<Gray, Byte> grayScaleBaseImg = matWebcam.ToImage<Gray, Byte>();
 
-            CopyToImage(ref img, ref resultImage, 0, 0);
-            CopyToImage(ref img, ref resultImage, img.Width, 0);
+            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(baseImg.Width * 2, baseImg.Height);
+
+            CopyToImage(ref baseImg, ref resultImage, 0, 0);
+            CopyToImage(ref grayScaleBaseImg, ref resultImage, grayScaleBaseImg.Width, 0);
 
             Mat matRes = resultImage.Mat;
 
@@ -28,6 +30,7 @@ namespace TP1_EmguCV {
 
         }
 
+        // BGR to BGR
         static void CopyToImage(ref Image<Bgr, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY) {
 
             for (int i = 0; i < inputImg.Height; i++) {
@@ -42,14 +45,15 @@ namespace TP1_EmguCV {
 
         }
 
-        static void CopyToImage(ref Image<Hsv, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY, int channel) {
+        // Gray to BGR
+        static void CopyToImage(ref Image<Gray, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY) {
 
             for (int i = 0; i < inputImg.Height; i++) {
                 for (int j = 0; j < inputImg.Width; j++) {
 
-                    outputImg.Data[i + offsetX, j + offsetY, 0] = inputImg.Data[i, j, channel];
-                    outputImg.Data[i + offsetX, j + offsetY, 1] = inputImg.Data[i, j, channel];
-                    outputImg.Data[i + offsetX, j + offsetY, 2] = inputImg.Data[i, j, channel];
+                    outputImg.Data[i + offsetY, j + offsetX, 0] = inputImg.Data[i, j, 0];
+                    outputImg.Data[i + offsetY, j + offsetX, 1] = inputImg.Data[i, j, 0];
+                    outputImg.Data[i + offsetY, j + offsetX, 2] = inputImg.Data[i, j, 0];
 
                 }
             }
