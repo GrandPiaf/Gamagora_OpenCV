@@ -9,13 +9,43 @@ namespace TP1_EmguCV {
     class Program {
         static void Main(string[] args) {
 
-            Exercice4();
+            Exercice5();
+
+        }
+
+        static void Exercice5() {
+
+            String window = "TP1 - Exercice 5";
+            CvInvoke.NamedWindow(window);
+
+            Mat matBase = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
+
+            Mat matHsv = new Mat(matBase.Width, matBase.Height, DepthType.Cv8U, 2);
+
+            CvInvoke.CvtColor(matBase, matHsv, ColorConversion.Bgr2Hsv);
+
+            Image<Bgr, Byte> resultImage = new Image<Bgr, byte>(matBase.Width * 3, matBase.Height * 2);
+
+            Image<Bgr, Byte> imgBase = matBase.ToImage<Bgr, Byte>();
+            Image<Hsv, Byte> imgHsv = matHsv.ToImage<Hsv, Byte>();
+
+            CopyToImage(ref imgBase, ref resultImage, 0, 0);
+            CopyToImage(ref imgHsv, ref resultImage, imgBase.Width, 0);
+            GrayCopyChannelToImage(ref imgHsv, ref resultImage, 0, imgBase.Height, 0);
+            GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width, imgBase.Height, 1);
+            GrayCopyChannelToImage(ref imgHsv, ref resultImage, imgBase.Width * 2, imgBase.Height, 2);
+
+            resultImage.Save("..\\..\\..\\..\\images\\resultEx5.jpg");
+
+            CvInvoke.Imshow(window, resultImage.Mat);
+            CvInvoke.WaitKey(0);  //Wait for the key pressing event
+            CvInvoke.DestroyWindow(window); //Destroy the window if key is pressed
 
         }
 
         static void Exercice4() {
 
-            String window = "TP1";
+            String window = "TP1 - Exercice 4";
             CvInvoke.NamedWindow(window);
 
             Mat matBase = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
@@ -51,7 +81,7 @@ namespace TP1_EmguCV {
 
         static void Exercice3() {
 
-            String window = "TP1";
+            String window = "TP1 - Exercice 3";
             CvInvoke.NamedWindow(window);
 
             Mat matWebcam = new Mat("..\\..\\..\\..\\images\\crochet.jpg"); //Because it is located in directory "netcoreapp3.1"
@@ -88,6 +118,21 @@ namespace TP1_EmguCV {
 
         }
 
+        // HSV to BGR
+        static void CopyToImage(ref Image<Hsv, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY) {
+
+            for (int i = 0; i < inputImg.Height; i++) {
+                for (int j = 0; j < inputImg.Width; j++) {
+
+                    outputImg.Data[i + offsetY, j + offsetX, 0] = inputImg.Data[i, j, 0];
+                    outputImg.Data[i + offsetY, j + offsetX, 1] = inputImg.Data[i, j, 1];
+                    outputImg.Data[i + offsetY, j + offsetX, 2] = inputImg.Data[i, j, 2];
+
+                }
+            }
+
+        }
+
         // Gray to BGR
         static void CopyToImage(ref Image<Gray, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY) {
 
@@ -103,8 +148,23 @@ namespace TP1_EmguCV {
 
         }
 
-        // Gray to BGR
+        // BGR to BGR single channel
         static void GrayCopyChannelToImage(ref Image<Bgr, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY, int channel) {
+
+            for (int i = 0; i < inputImg.Height; i++) {
+                for (int j = 0; j < inputImg.Width; j++) {
+
+                    outputImg.Data[i + offsetY, j + offsetX, 0] = inputImg.Data[i, j, channel];
+                    outputImg.Data[i + offsetY, j + offsetX, 1] = inputImg.Data[i, j, channel];
+                    outputImg.Data[i + offsetY, j + offsetX, 2] = inputImg.Data[i, j, channel];
+
+                }
+            }
+
+        }
+
+        // Hsv to BGR single channel
+        static void GrayCopyChannelToImage(ref Image<Hsv, Byte> inputImg, ref Image<Bgr, Byte> outputImg, int offsetX, int offsetY, int channel) {
 
             for (int i = 0; i < inputImg.Height; i++) {
                 for (int j = 0; j < inputImg.Width; j++) {
