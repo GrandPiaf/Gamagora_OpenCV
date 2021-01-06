@@ -18,7 +18,7 @@ public class Webcam : MonoBehaviour
     private Texture2D tex;
 
     private CascadeClassifier frontFaceCascadeClassifier;
-    private string AbsPathToFrontCascadeClassidier = @"D:\Cours\Gamagora\OpenCV\TP2\TP2_EmguCV\Assets\haarcascades\haarcascade_frontalface_default.xml";
+    private string AbsPathToFrontCascadeClassidier = @"Assets\haarcascades\haarcascade_frontalface_default.xml";
 
     private System.Drawing.Rectangle[] frontFaces;
     private int MIN_FACE_SIZE = 50;
@@ -26,7 +26,8 @@ public class Webcam : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
-        webcam = new VideoCapture("D:\\Cours\\Gamagora\\OpenCV\\TP2\\video.mp4");
+        //webcam = new VideoCapture("D:\\Cours\\Gamagora\\OpenCV\\TP2\\video.mp4");
+        webcam = new VideoCapture(@"..\video.mp4");
         webcamFrame = new Mat();
 
         webcam.ImageGrabbed += new System.EventHandler(HandleWebcamQueryFrame);
